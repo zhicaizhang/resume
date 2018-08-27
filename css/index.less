@@ -1,0 +1,373 @@
+.CENTER(@W,@H){
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: unit(-@W/2,rem);
+  margin-top: unit(-@H/2,rem);
+  width: unit(@W,rem);
+  height: unit(@H,rem);
+}
+
+
+html {
+  font-size: 100px; /*1rem=100px;设计稿是640*/
+}
+
+html, body {
+  //=>保证当前页面就是一屏幕的宽高
+  height: 100%;
+  overflow: hidden;
+  background: #F4F4F4;
+}
+
+.mainBox {
+  //=>保证最大宽度是640px
+  margin: 0 auto;
+  max-width: 640px;
+  height: 100%;
+  background: #FFF;
+}
+
+/*
+魔方区域
+*/
+.cubeBox {
+  position: relative;
+  height: 100%;
+  background: url("../images/zf_cubeBg.jpg") no-repeat;
+  background-size: cover;
+
+  perspective: 2000px; //为了实现3d效果
+
+  .tip {
+    position: absolute;
+    bottom: 0.5rem;
+    /*定位水平方向居中的方法*/
+    left: 50%;
+    transform: translateX(-50%); //或maing-left:-1.97rem
+
+    width: 3.94rem; //根据设计稿写尺寸
+    height: 0.44rem;
+  }
+
+  .cube {
+    /*position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -2.55rem 0 0 -2.55rem; //不用transform，防止和后面冲突
+    width: 5.1rem;
+    height: 5.1rem;*/
+    .CENTER(5.1,5.1);//已经封装好的函数
+    transform-style: preserve-3d; //为了实现3d效果
+    transition: 0.3s; //为了实现3d效果\
+
+    transform: scale(0.6) rotateX(-35deg) rotateY(35deg); //角度
+
+    li {
+      //初始把六个面叠加在一起
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden; //为了实现3d效果
+      img {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      //为了实现3d效果
+
+      &:nth-child(1) { /*获取li中的第一个*/
+        transform: translateZ(2.55rem);
+      }
+      &:nth-child(2) {
+        transform: translateZ(-2.55rem) rotateY(180deg);
+      }
+      &:nth-child(3) {
+        transform: translateX(-2.55rem) rotateY(-90deg);
+      }
+      &:nth-child(4) {
+        transform: translateX(2.55rem) rotateY(90deg);
+      }
+      &:nth-child(5) {
+        transform: translateY(-2.55rem) rotateX(90deg);
+      }
+      &:nth-child(6) {
+        transform: translateY(2.55rem) rotateX(-90deg);
+      }
+    }
+  }
+}
+
+/*
+detailBox 详情区域
+*/
+.detailBox {
+  display: none;
+  height: 100%;
+  .swiper-container {
+    height: 100%;
+    .swiper-wrapper {
+      height: 100%;
+      .swiper-slide {
+        height: 100%;
+        &:nth-child(2) { //第一个默认为白色，可不用写
+          background: #FFF9C1;
+        }
+        &:nth-child(3) {
+          background: #E45454;
+        }
+        &:nth-child(4) {
+          background: #FAC471;
+        }
+        &:nth-child(5) {
+          background: #FBFFE8;
+        }
+        &:nth-child(6) {
+          background: #5975FF;
+        }
+      }
+    }
+  }
+
+  .page1{
+    position: relative;
+    dl{
+      /*position: absolute;
+      top:50%;
+      left: 50%;
+      width: 5.4rem;
+      height: 7.2rem;*/
+      .CENTER(5.4, 7.2);
+
+      dt,dd{
+        box-sizing: border-box;
+        height: 0.6rem;
+        line-height: 0.6rem;
+        background: #8FBB4C;
+      }
+      dt{
+
+        font-size: 0.36rem;
+        color: yellow;
+      }
+      dd{
+        position: relative;
+        border-top: 0.02rem dashed rgba(255,255,255,0.3);
+
+        i{
+          position: absolute;
+          left: 0.15rem;
+          top:50%;
+          margin-top: -0.21rem;
+          width: 0.36rem;
+          height: 0.42rem;
+          background: url("../images/zf_outline.png") no-repeat;
+          background-size: 100% 100%;
+          font-size: 0.2rem;
+          color:#FFF;
+          text-align: center;
+          line-height: 0.42rem;
+          font-style: normal;
+        }
+        a{
+          display: block;//这里设置为block后，不用设置宽度，会直接继承父级宽度
+          margin-left: 0.66rem;
+          font-size: 0.28rem;
+          color: #555;
+
+          //文字截取(超出部分显示省略号)。注：文字截取设置必须要设置a的宽，所以必须要将a设置为display: block;这里不能用浮动，因为浮动之后a变为inline-block，需要给a设置一个具体的宽度（测量）才能设置文字截取
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+        }
+      }
+    }
+  }
+
+  .page2{
+    position: relative;
+
+    .title{
+      opacity:0;//动画执行之前让其隐藏
+      position: absolute;
+      left: 0;
+      width: 0.8rem;
+      width: 100%;
+      height: 0.9rem;
+      line-height: 0.9rem;
+      text-align: center;
+      font-size: 0.6rem;
+      font-weight: normal;
+    }
+    img{
+      opacity: 0;//动画执行之前让其隐藏
+      .CENTER(1,1);
+
+      &:nth-of-type(1){
+        /*
+        .page2 img:nth-child(1):找到PAGE2中所有子元素中的第一个，并且这个元素需要时img标签才可以（先找子元素，再看标签分类）
+        .page2 img:nth-of-type(1):先找到PAGE2子元素中的所有IMG，然后筛选出IMG中的第一个（先分组，再筛选）
+        */
+        .CENTER(1.32,1.7);
+      }
+    }
+  }
+
+
+  //page2的动画
+  //1.js中做了这样一个处理，滑动到某一页，让其页的id消失，让当前页有一个“page”的id
+  //2.需求：滑动到当前页，让页面中的元素有动画效果
+  //3.动画实现的规律：把当前页面所有动画效果都写的ID为page下（id选择器具有唯一性而且优先级高）
+
+  //4.注意点：所有需要运动的元素，执行动画之前都是隐藏的（.page中设置透明度为0，动画执行完成让其显示）
+  #page2{
+    .title{
+      animation: bounceInLeft 1s both;
+    }
+
+    img{
+      &:nth-of-type(1){
+        animation: shake 1s both;
+      }
+
+      //其余6张小图
+      &:nth-of-type(2){
+        margin-top: -2.9rem;//-2.4+(-0.5)，-0.5为CENTER中的margin值（因为：img{.CENTER(1,1);}）
+      }
+      &:nth-of-type(3){
+        margin-top: -1.7rem;
+        margin-left: 1.5rem;
+      }
+      &:nth-of-type(4){
+        margin-top: 0.7rem;
+        margin-left: 1.5rem;
+      }
+      &:nth-of-type(5){
+        margin-top: 1.9rem;
+      }
+      &:nth-of-type(6){
+        margin-top: 0.7rem;
+        margin-left: -2.5rem;
+      }
+      &:nth-of-type(7){
+        margin-top: -1.7rem;
+        margin-left: -2.5rem;
+      }
+
+      &:not(:nth-of-type(1)){//除了第一张图
+        transition: 0.5s;
+        opacity: 1;//解决闪烁问题
+        animation: tada 1s 0.5s infinite both;//延迟0.5s
+      }
+    }
+  }
+}
+
+@keyframes bounceInLeft {
+  from,
+  60%,
+  75%,
+  90%,
+  to {
+    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(-3000px, 0, 0);
+    transform: translate3d(-3000px, 0, 0);
+  }
+
+  60% {
+    opacity: 1;
+    -webkit-transform: translate3d(25px, 0, 0);
+    transform: translate3d(25px, 0, 0);
+  }
+
+  75% {
+    -webkit-transform: translate3d(-10px, 0, 0);
+    transform: translate3d(-10px, 0, 0);
+  }
+
+  90% {
+    -webkit-transform: translate3d(5px, 0, 0);
+    transform: translate3d(5px, 0, 0);
+  }
+
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    opacity: 1;//执行完动画显示
+  }
+}
+
+@keyframes shake {
+  from,
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    -webkit-transform: translate3d(-10px, 0, 0);
+    transform: translate3d(-10px, 0, 0);
+  }
+
+  20%,
+  40%,
+  60%,
+  80% {
+    -webkit-transform: translate3d(10px, 0, 0);
+    transform: translate3d(10px, 0, 0);
+  }
+  100%{
+    opacity: 1;
+  }
+}
+@keyframes tada {
+  from {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+
+  10%,
+  20% {
+    -webkit-transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);
+  }
+
+  30%,
+  50%,
+  70%,
+  90% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+  }
+
+  40%,
+  60%,
+  80% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+  }
+
+  to {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+    opacity: 1;
+  }
+}
+
+
+
+
+
+
+
